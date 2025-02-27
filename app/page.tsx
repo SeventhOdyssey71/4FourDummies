@@ -19,7 +19,7 @@ const ecosystemProjects = [
   { name: "Tradeport", description: "NFT marketplace and trading platform", icon: "🎨" },
   { name: "NS", description: "Naming service for Sui addresses", icon: "📝" },
   { name: "AnimaLabs", description: "Gaming and NFT infrastructure", icon: "🎮" },
-  { name: "7kAg", description: "Web3 gaming studio and platform", icon: "🎲" },
+  { name: "7kAg", description: "Smart Trading Ecosystem for smart traders", icon: "🎲" },
 ]
 
 export default function Home() {
