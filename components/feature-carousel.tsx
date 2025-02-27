@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { useState, useRef, useCallback, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 const features = [
   {
@@ -11,25 +12,24 @@ const features = [
     title: "Blockchain Gaming",
     description:
       "Experience the future of gaming with blockchain technology. Learn about NFTs, play-to-earn mechanics, and more.",
-    video: "",
+    image: "https://pbs.twimg.com/media/GenUvUiXEAAKs1O?format=jpg&name=large",
   },
   {
     id: 2,
     title: "DeFi Fundamentals",
     description: "Master the basics of decentralized finance, from staking to yield farming and beyond.",
-    video: "",
+    image: "https://pbs.twimg.com/media/GkuFM83XYAAfVOG?format=jpg&name=medium",
   },
   {
     id: 3,
     title: "Interactive Learning",
     description: "Learn by doing with our interactive tutorials and hands-on exercises.",
-    video: "",
+    image: "https://pbs.twimg.com/media/GcqkklHbQAAIjyF?format=jpg&name=4096x4096",
   },
 ]
 
 export function FeatureCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
   const intervalRef = useRef<NodeJS.Timeout>()
 
   const nextSlide = useCallback(() => {
@@ -42,7 +42,7 @@ export function FeatureCarousel() {
 
   // Auto-advance slides every 4 seconds
   useEffect(() => {
-    intervalRef.current = setInterval(nextSlide, 1800)
+    intervalRef.current = setInterval(nextSlide, 4000)
 
     return () => {
       if (intervalRef.current) {
@@ -63,27 +63,8 @@ export function FeatureCarousel() {
     if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
-    intervalRef.current = setInterval(nextSlide, 1800)
+    intervalRef.current = setInterval(nextSlide, 4000)
   }, [nextSlide])
-
-  // Handle video loading and playback
-  const handleVideoLoad = useCallback((index: number) => {
-    const video = videoRefs.current[index]
-    if (video) {
-      video.play().catch((error) => {
-        console.log("Video autoplay failed:", error)
-      })
-    }
-  }, [])
-
-  // Preload videos
-  useEffect(() => {
-    features.forEach((feature, index) => {
-      const video = document.createElement("video")
-      video.src = feature.video
-      video.preload = "auto"
-    })
-  }, [])
 
   return (
     <div
@@ -100,41 +81,15 @@ export function FeatureCarousel() {
           transition={{ duration: 0.5 }}
           className="absolute inset-0"
         >
-          {/* Video Background */}
+          {/* Background Image */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 to-purple-900/50">
-            {features[currentIndex].video.includes("x.com") ? (
-              <div className="w-full h-full">
-                <iframe
-                  src={`https://twitframe.com/show?url=${encodeURIComponent(features[currentIndex].video)}`}
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                ></iframe>
-              </div>
-            ) : features[currentIndex].video.includes("youtube.com") ? (
-              <iframe
-                src={`https://www.youtube.com/embed/${features[currentIndex].video.split("v=")[1]}`}
-                width="100%"
-                height="100%"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            ) : (
-              <video
-                ref={(el) => (videoRefs.current[currentIndex] = el)}
-                key={features[currentIndex].video}
-                autoPlay
-                loop
-                muted
-                playsInline
-                onLoadedData={() => handleVideoLoad(currentIndex)}
-                className="w-full h-full object-cover opacity-50"
-              >
-                <source src={features[currentIndex].video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            )}
+            <Image
+              src={features[currentIndex].image || "/placeholder.svg"}
+              alt={features[currentIndex].title}
+              layout="fill"
+              objectFit="cover"
+              className="opacity-50"
+            />
           </div>
 
           {/* Content */}
